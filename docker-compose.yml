@@ -1,15 +1,14 @@
 version: '3.8'
 
 services:
-  web:
+  portfolio-web:
+    container_name: portfolio-web
     build: .
     command: gunicorn --bind 0.0.0.0:8000 portfolio_project.wsgi:application
     volumes:
       - static_volume:/app/staticfiles
       - media_volume:/app/media
       - ./db.sqlite3:/app/db.sqlite3
-    ports:
-      - "8000:8000"
     env_file:
       - .env
     networks:
@@ -21,3 +20,5 @@ volumes:
 
 networks:
   portfolio_network:
+    external: true
+    name: angelapinheiro_app-network
