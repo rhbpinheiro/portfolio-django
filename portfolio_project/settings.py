@@ -29,6 +29,18 @@ DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '*').split(',')
 
+# Configurações de Segurança para Produção (HTTPS)
+if not DEBUG:
+    # Confia no header X-Forwarded-Proto que o Nginx envia
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    # Força redirecionamento para HTTPS
+    SECURE_SSL_REDIRECT = True
+    # Cookies seguros
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    # Origins confiáveis (Necessário para Django 4.0+)
+    CSRF_TRUSTED_ORIGINS = ['https://' + host for host in ALLOWED_HOSTS]
+
 
 # Application definition
 
