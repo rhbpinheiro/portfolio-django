@@ -30,5 +30,6 @@ urlpatterns = [
     path('accounts/logout/', auth_views.LogoutView.as_view(next_page='/'), name='logout'),
 
     # Serve media files directly via Django (since Nginx container doesn't have the volume mount)
+    # Força o Django a servir arquivos de mídia mesmo com DEBUG=False (para suportar o proxy do Nginx)
     re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
 ]
