@@ -1,0 +1,142 @@
+{% extends 'manager/base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<script>
+  function openTab(evt, tabName) {
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+      tabcontent[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("tablink");
+    for (i = 0; i < tablinks.length; i++) {
+      tablinks[i].classList.remove("border-neon-blue", "text-neon-blue");
+      tablinks[i].classList.add("border-transparent", "text-gray-400");
+    }
+    document.getElementById(tabName).style.display = "block";
+    evt.currentTarget.classList.remove("border-transparent", "text-gray-400");
+    evt.currentTarget.classList.add("border-neon-blue", "text-neon-blue");
+  }
+  // Set default tab on page load
+  document.addEventListener("DOMContentLoaded", function () {
+    document.querySelector(".tablink").click();
+  });
+</script>
+
+<div class="mb-8 border-b border-gray-800">
+  <div class="flex space-x-8">
+    <button
+      class="tablink pb-4 border-b-2 border-neon-blue text-neon-blue font-bold text-lg focus:outline-none transition-colors duration-300"
+      onclick="openTab(event, 'projects')">
+      <i class="fas fa-project-diagram mr-2"></i>Meus Projetos
+    </button>
+    <button
+      class="tablink pb-4 border-b-2 border-transparent text-gray-400 font-bold text-lg hover:text-white focus:outline-none transition-colors duration-300"
+      onclick="openTab(event, 'skills')">
+      <i class="fas fa-code mr-2"></i>Minhas Skills
+    </button>
+  </div>
+</div>
+
+<!-- PROJETOS TAB -->
+<div id="projects" class="tabcontent animation-fade-in">
+  <div class="flex justify-end mb-6">
+    <a href="{% url 'project_create' %}"
+      class="px-4 py-2 border border-neon-blue text-neon-blue rounded hover:bg-neon-blue hover:text-black hover:shadow-neon-hover transition-all duration-300 flex items-center shadow-neon">
+      <i class="fas fa-plus mr-2"></i>Novo Projeto
+    </a>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {% for project in projects %}
+    <div
+      class="bg-card border border-gray-800 rounded-lg overflow-hidden hover:-translate-y-1 hover:border-neon-secondary hover:shadow-[0_5px_15px_rgba(0,136,255,0.2)] transition-all duration-300 flex flex-col h-full">
+      {% if project.image %}
+      <div class="h-48 overflow-hidden">
+        <img src="{{ project.image.url }}" class="w-full h-full object-cover" alt="{{ project.title }}">
+      </div>
+      {% endif %}
+
+      <div class="p-5 flex-grow">
+        <h5 class="text-xl font-bold text-white mb-2">
+          {% if project.is_featured %}
+          <span class="text-xs bg-neon-blue text-black px-2 py-1 rounded font-bold mr-2 align-middle">DESTAQUE</span>
+          {% endif %}
+          {{ project.title }}
+        </h5>
+        <p class="text-gray-400 text-sm mb-4 line-clamp-3">{{ project.description }}</p>
+      </div>
+
+      <div class="p-5 pt-0 mt-auto flex justify-between border-t border-gray-800/50 pt-4">
+        <a href="{% url 'project_update' project.pk %}"
+          class="text-sm text-cyan-400 hover:text-white transition-colors">
+          <i class="fas fa-edit mr-1"></i>Editar
+        </a>
+        <a href="{% url 'project_delete' project.pk %}"
+          class="text-sm text-red-500 hover:text-red-400 transition-colors">
+          <i class="fas fa-trash-alt mr-1"></i>Excluir
+        </a>
+      </div>
+    </div>
+    {% empty %}
+    <div class="col-span-full text-center py-12 text-gray-500">
+      <p class="text-xl">Nenhum projeto cadastrado.</p>
+      <p class="text-sm mt-2">Clique em "Novo Projeto" para começar.</p>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- SKILLS TAB -->
+<div id="skills" class="tabcontent hidden animation-fade-in" style="display:none;">
+  <div class="flex justify-end mb-6">
+    <a href="{% url 'skill_create' %}"
+      class="px-4 py-2 border border-gray-600 text-gray-300 rounded hover:border-neon-blue hover:text-neon-blue transition-all duration-300 text-sm">
+      <i class="fas fa-plus mr-2"></i>Nova Skill
+    </a>
+  </div>
+
+  <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+    {% for skill in skills %}
+    <div
+      class="bg-card border border-gray-800 p-4 rounded text-center hover:border-neon-blue transition-colors group relative">
+      <div class="text-2xl text-gray-500 group-hover:text-neon-blue mb-2 transition-colors">
+        {% if skill.icon %}<i class="{{ skill.icon }}"></i>{% else %}<i class="fas fa-code"></i>{% endif %}
+      </div>
+      <h4 class="font-bold text-white">{{ skill.name }}</h4>
+      <div class="text-xs text-gray-500 mt-1">{{ skill.proficiency }}%</div>
+
+      <div
+        class="absolute inset-0 bg-black/90 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded">
+        <a href="{% url 'skill_update' skill.pk %}" class="text-neon-blue mx-2 hover:text-white"><i
+            class="fas fa-edit"></i></a>
+        <a href="{% url 'skill_delete' skill.pk %}" class="text-red-500 mx-2 hover:text-red-400"><i
+            class="fas fa-trash"></i></a>
+      </div>
+    </div>
+    {% empty %}
+    <p class="text-gray-500 col-span-full">Nenhuma skill cadastrada.</p>
+    {% endfor %}
+  </div>
+</div>
+
+<style>
+  .animation-fade-in {
+    animation: fadeIn 0.3s ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>
+{% endblock %}

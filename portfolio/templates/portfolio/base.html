@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rodolpho Pinheiro | Desenvolvedor Python</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            bg: '#0a0a0a',
+            card: '#161616',
+            'neon-blue': '#00f3ff',
+            'neon-secondary': '#0088ff',
+          },
+          boxShadow: {
+            'neon': '0 0 10px #00f3ff',
+            'neon-hover': '0 0 20px #00f3ff, 0 0 40px #00f3ff',
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="icon" type="image/png" href="/media/logos/logo_round.png">
+  <style>
+    body {
+      background-color: #0a0a0a;
+      color: #e0e0e0;
+    }
+
+    .hero-pattern {
+      background-color: #0a0a0a;
+      background-image: radial-gradient(#00f3ff 1px, transparent 1px);
+      background-size: 50px 50px;
+      opacity: 0.1;
+    }
+  </style>
+</head>
+
+<body class="font-sans antialiased selection:bg-neon-blue selection:text-black">
+
+  <!-- Navbar Transparente -->
+  <nav class="fixed w-full z-50 bg-black/80 backdrop-blur-md border-b border-gray-800">
+    <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+      <a href="#" id="secret-trigger" class="flex items-center gap-3 group select-none">
+        <span class="text-xl font-bold text-white tracking-tighter group-hover:text-neon-blue transition-colors">
+          RODOLPHO<span class="text-neon-blue group-hover:text-white transition-colors">.DEV</span>
+        </span>
+      </a>
+      <div class="hidden md:flex space-x-8 text-sm font-medium">
+        <a href="#about" class="hover:text-neon-blue transition-colors">Sobre</a>
+        <a href="#skills" class="hover:text-neon-blue transition-colors">Skills</a>
+        <a href="#projects" class="hover:text-neon-blue transition-colors">Projetos</a>
+        <a href="#contact" class="hover:text-neon-blue transition-colors">Contato</a>
+      </div>
+      <a href="{% url 'login' %}" id="admin-lock"
+        class="hidden text-xs text-gray-500 hover:text-white transition-colors">
+        <i class="fas fa-lock"></i>
+      </a>
+    </div>
+  </nav>
+
+  <script>
+    let secretCount = 0;
+    const trigger = document.getElementById('secret-trigger');
+    const lock = document.getElementById('admin-lock');
+
+    trigger.addEventListener('click', (e) => {
+      e.preventDefault();
+      secretCount++;
+      if (secretCount === 5) {
+        lock.classList.remove('hidden');
+        lock.classList.add('animate-bounce'); // Visual feedback
+      }
+    });
+  </script>
+
+  {% block content %}{% endblock %}
+
+  <!-- Footer -->
+  <footer class="bg-black py-8 border-t border-gray-800 text-center text-gray-500 text-sm">
+    <p>&copy; 2026 Rodolpho Pinheiro. Built with <span class="text-neon-blue">Django & Tailwind</span>.</p>
+  </footer>
+
+</body>
+
+</html>

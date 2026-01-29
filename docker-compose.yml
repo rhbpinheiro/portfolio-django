@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    command: gunicorn --bind 0.0.0.0:8000 portfolio_project.wsgi:application
+    volumes:
+      - static_volume:/app/staticfiles
+      - media_volume:/app/media
+      - ./db.sqlite3:/app/db.sqlite3
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    networks:
+      - portfolio_network
+
+volumes:
+  static_volume:
+  media_volume:
+
+networks:
+  portfolio_network:

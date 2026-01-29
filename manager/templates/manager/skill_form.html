@@ -1,0 +1,36 @@
+{% extends 'manager/base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="max-w-md mx-auto">
+  <div class="bg-card border border-gray-800 rounded-lg p-8 shadow-lg">
+    <h3 class="text-2xl font-bold text-neon-blue mb-6 border-b border-gray-800 pb-2">{{ title }}</h3>
+
+    <form method="post" class="space-y-6">
+      {% csrf_token %}
+
+      {% for field in form %}
+      <div>
+        <label class="block text-sm font-medium text-gray-300 mb-1">{{ field.label }}</label>
+        {{ field }}
+        {% if field.errors %}
+        <div class="text-red-500 text-xs mt-1">{{ field.errors }}</div>
+        {% endif %}
+        {% if field.help_text %}
+        <div class="text-gray-500 text-xs mt-1">{{ field.help_text }}</div>
+        {% endif %}
+      </div>
+      {% endfor %}
+
+      <div class="flex justify-end space-x-4 pt-4 border-t border-gray-800">
+        <a href="{% url 'dashboard' %}" class="px-4 py-2 text-gray-400 hover:text-white transition-colors">Cancelar</a>
+        <button type="submit"
+          class="px-6 py-2 bg-transparent border border-neon-blue text-neon-blue rounded hover:bg-neon-blue hover:text-black hover:shadow-neon transition-all duration-300 font-bold">
+          Salvar Skill
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
